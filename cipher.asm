@@ -18,8 +18,33 @@ start:
 main_loop:
     ; (ดึงข้อมูลจาก Buffer เข้า AL)
 
-    ; [ส่วนของ จิรภัทร: Logic ทั้งหมด]
-    ; (จิรภัทรเขียนส่วนตรวจสอบช่วงตัวอักษรและการ Shift)
+process_cipher:
+    cmp al, 'A'
+    jb  finish
+    cmp al, 'z'
+    ja  finish
+    cmp al, 'Z'
+    jbe is_upper
+    cmp al, 'a'
+    jae is_lower
+    jmp finish
+
+is_upper:
+    add al, [shift]
+    cmp al, 'Z'
+    jbe finish
+    sub al, 26
+    ret
+
+is_lower:
+    add al, [shift]
+    cmp al, 'z'
+    jbe finish
+    sub al, 26
+
+finish:
+    ret
+    ; [ส่วนของ จิรภัทร: Logic ทั้งหมดจิรภัทรเขียนส่วนตรวจสอบช่วงตัวอักษรและการ Shift]
 
     ; [ส่วนของ นพรัตน์: คำสั่งแสดงผล]
     ; (นพรัตน์เขียนส่งมา)
