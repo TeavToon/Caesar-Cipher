@@ -13,11 +13,23 @@ start:
     ; (นพรัตน์เขียนส่งมา)
 
     ; [ส่วนของ อลงกต: โครงสร้าง Loop หลัก]
-    ; (อลงกตควบคุมการอ่านค่าทีละตัว)
+    xor cx, cx
+    mov cl, [buffer + 1] ; ความยาวจริง
+    mov bx, 0
 
 main_loop:
-    ; (ดึงข้อมูลจาก Buffer เข้า AL)
+    cmp cl, 0
+    je display_result
+    mov al, [text_data + bx]
+    
+    call process_cipher   ; เรียกงานของจิรภัทร
+    
+    mov [text_data + bx], al
+    inc bx
+    dec cl
+    jmp main_loop
 
+    ; (ดึงข้อมูลจาก Buffer เข้า AL)
 process_cipher:
     cmp al, 'A'
     jb  finish
@@ -44,7 +56,6 @@ is_lower:
 
 finish:
     ret
-    ; [ส่วนของ จิรภัทร: Logic ทั้งหมดจิรภัทรเขียนส่วนตรวจสอบช่วงตัวอักษรและการ Shift]
 
     ; [ส่วนของ นพรัตน์: คำสั่งแสดงผล]
     ; (นพรัตน์เขียนส่งมา)
