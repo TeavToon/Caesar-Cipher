@@ -2,7 +2,11 @@ org 100h
 
 section .data
     ; [ส่วนของ นพรัตน์: ตัวแปรและ Buffer]
-    ; (นพรัตน์เขียนส่งมา)
+    ; --- Data Section ---
+    prompt    db 'Enter text: $'
+    result_m  db 0Dh, 0Ah, 'Encrypted: $'
+    buffer    db 100, 0
+    text_data times 101 db '$'
 
     ; [ส่วนของ อลงกต: ค่าคงที่]
     shift db 3
@@ -10,7 +14,13 @@ section .data
 section .text
 start:
     ; [ส่วนของ นพรัตน์: คำสั่งรับค่า]
-    ; (นพรัตน์เขียนส่งมา)
+    ; --- Input Section ---
+    mov ah, 09h
+    mov dx, prompt
+    int 21h
+    mov ah, 0Ah
+    mov dx, buffer
+    int 21h
 
     ; [ส่วนของ อลงกต: โครงสร้าง Loop หลัก]
     xor cx, cx
@@ -58,4 +68,9 @@ finish:
     ret
 
     ; [ส่วนของ นพรัตน์: คำสั่งแสดงผล]
-    ; (นพรัตน์เขียนส่งมา)
+    ; --- Output Section ---
+    mov ah, 09h
+    mov dx, result_m
+    int 21h
+    mov dx, text_data
+    int 21h
